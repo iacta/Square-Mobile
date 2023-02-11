@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home/homescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-Future<void> main() async {
-  final prefs = await SharedPreferences.getInstance();
-  if (prefs.containsKey('key')) {
-    runApp(const HomeApp());
-  }
-}
+import 'package:square/functions/api.dart';
+import 'modules/views/homescreen.dart';
 
 class HomeApp extends StatefulWidget {
   const HomeApp({super.key});
@@ -17,9 +11,11 @@ class HomeApp extends StatefulWidget {
 }
 
 class HomeAppState extends State<HomeApp> {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.dark),
       home: const HomeScreen(),
     );

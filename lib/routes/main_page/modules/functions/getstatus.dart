@@ -1,50 +1,132 @@
-import 'dart:convert';
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart';
+import '../../home/status.dart';
 
-void main() async {
-  //status();
-  const dbName = 'square';
-  const dbAddress = 'localhost';
 
-  const defaultUri = 'mongodb://$dbAddress:27017/$dbName';
 
-  var db = mongo.Db(defaultUri);
-  await db.open();
-
-  Future cleanupDatabase() async {
-    await db.close();
-  }
-
-  if (!db.masterConnection.serverCapabilities.supportsOpMsg) {
-    return;
-  }
-
-  var collection = db.collection('users');
-  List opa = ['teste'];
-  var res = await collection.findOne();
-  List teste = res?['Applications'];
-  Iterable<void> list2 = teste.map((number) => opa.add(number));
-  print(teste.length);
-  print(res?['Applications']);
-  print(opa);
-  for (var i = 0; i < teste.length; i++) {
-    opa.add(teste[i]['tag']);
-  }
-  print(opa);
-  await cleanupDatabase();
+Future website() async {
+  print('===========[DEBUG LOADER STATUS] ==============');
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2n8j/eeo9v'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+  percent['WebSite\nsquarecloud.app'] = filter.text;
 }
 
-Future status() async {
-  final get = await http.get(
-      Uri.parse('https://api.squarecloud.app/v1/public/user'),
-      headers: <String, String>{
-        'Authorization':
-            '858677648317481010-d44c4fe7770d06bfd702b52ed4323f10ab254e6a720df4a2f5b2e07a7f2f0bd6'
-      });
-  return print(get.body);
+Future documentation() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2n8j/eeodt '));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
 }
+
+Future api() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2n8k/eeo9y'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+  percent['Api'] = filter.text;
+}
+
+//
+//
+//
+//////////////////////////Services /////////////////////////////////////
+services() {
+  sbd();
+  sbp();
+  sbr();
+}
+
+Future sbd() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2n8k/efax8'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+}
+
+Future sbp() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2n8k/efn70'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+}
+
+Future sbr() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2n8k/egaip'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+}
+
+//
+//
+//
+//////////////////////////////Clusters ////////////////////////
+clusters() {
+  florida1();
+  florida2();
+  florida3();
+  floridafree();
+}
+
+Future florida1() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2p88/ejl6q'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+  percent['florida-1'] = filter.text;
+}
+
+Future florida2() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2p88/ejl6r'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+  percent['florida-2'] = filter.text;
+}
+
+Future florida3() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2p88/ef3am'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+  percent['florida-3'] = filter.text;
+}
+
+Future floridafree() async {
+  final get =
+      await http.get(Uri.parse('https://status.squarecloud.app/r/2p88/ejndx'));
+  //print(get.body);
+  var document = parse(get.body);
+  var filter = document.getElementsByClassName('shrink-0')[1];
+  print(filter.text);
+  percent['florida-free'] = filter.text;
+  print('=================[FINISH]=====================');
+}
+
+
+
+//shrink-0
 
 //https://status.squarecloud.app/r/2n8j/eeo9v website
 //https://status.squarecloud.app/r/2n8j/eeodt documentation
