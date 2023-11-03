@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import 'routes/main_page/home.dart';
+import 'home.dart';
 import './login.dart';
 
 void main() async {
@@ -30,7 +30,8 @@ class _NanInternetState extends State<NanInternet> {
     return MaterialApp(
         theme: ThemeData.dark(),
         home: Scaffold(
-            backgroundColor: const Color.fromARGB(255, 18, 26, 43),
+            backgroundColor: const Color.fromARGB(255, 11, 14, 19),
+
             body: Flex(
               direction: Axis.vertical,
               children: [
@@ -63,16 +64,14 @@ class _NanInternetState extends State<NanInternet> {
                                   fontSize: 15),
                             ),
                           ]),
-                      const Wrap(
-                          alignment: WrapAlignment.center,
-                          children: [
-                            Text(
-                                'Parece que os gnomos da internet mexeram \nem alguma coisa errada!',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ))
-                          ]),
+                      const Wrap(alignment: WrapAlignment.center, children: [
+                        Text(
+                            'Parece que os gnomos da internet mexeram \nem alguma coisa errada!',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ))
+                      ]),
                       const Text('Verifique sua conexão com a internet!',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -102,5 +101,6 @@ class NanInternet extends StatefulWidget {
   const NanInternet({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NanInternetState createState() => _NanInternetState();
 }

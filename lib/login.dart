@@ -1,11 +1,14 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:square/modules/views/routes/main_page/homescreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'functions/api.dart';
-import 'routes/main_page/home.dart';
+import 'modules/functions/api.dart';
+import 'home.dart';
 
 final pageController = PageController(initialPage: 0);
 bool handler = false;
@@ -26,7 +29,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final pages = [const Page1(), const Page2(), const PageLogin()];
+  final pages = [const Page1(), const PageLogin()];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,8 +40,8 @@ class _LoginState extends State<Login> {
                 /*centerTitle: true,
                 title: Image.asset('assets/images/logo.webp',
                     height: 80, fit: BoxFit.cover), */
-                backgroundColor: const Color.fromARGB(255, 15, 23, 42)),
-            backgroundColor: const Color.fromARGB(255, 18, 26, 43),
+                backgroundColor: const Color(0xFF12171F)),
+            backgroundColor: const Color.fromARGB(255, 11, 14, 19),
             floatingActionButton: Stack(children: <Widget>[
               FloatingActionButton(
                 onPressed: () {
@@ -57,7 +60,7 @@ class _LoginState extends State<Login> {
             ]),
             bottomNavigationBar: Container(
                 height: 100.0,
-                color: const Color.fromARGB(255, 19, 27, 44),
+                color: const Color.fromARGB(255, 11, 14, 19),
                 child: Column(children: [
                   /* const Expanded(
                     child: Divider(
@@ -89,35 +92,43 @@ class _LoginState extends State<Login> {
                             curve: Curves.bounceIn);
                       }),
                   const SizedBox(height: 10),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    IconButton(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
                         onPressed: () => _launchUrl(
                             'https://discord.com/invite/squarecloud'),
                         icon: const ImageIcon(
-                          AssetImage('assets/images/discord.png'), //discord
-                          color: Color.fromARGB(255, 75, 42, 221),
-                        )),
-                    IconButton(
+                          AssetImage('assets/images/discord.png'),
+                          color: Color(0xFF2563EB),
+                        ),
+                      ),
+                      IconButton(
                         onPressed: () =>
                             _launchUrl('https://github.com/squarecloudofc'),
                         icon: const ImageIcon(
-                          AssetImage('assets/images/github.png'), // git
-                        )),
-                    IconButton(
+                          AssetImage('assets/images/github.png'),
+                          color: Color(0xFF2563EB),
+                        ),
+                      ),
+                      IconButton(
                         onPressed: () => _launchUrl(
                             'https://www.instagram.com/squarecloudofc/'),
                         icon: const ImageIcon(
-                          AssetImage('assets/images/instagram.png'), //insta
-                          color: Color.fromARGB(255, 219, 18, 152),
-                        )),
-                    IconButton(
+                          AssetImage('assets/images/instagram.png'),
+                          color: Color(0xFF2563EB),
+                        ),
+                      ),
+                      IconButton(
                         onPressed: () =>
                             _launchUrl('https://twitter.com/squarecloudofc/'),
                         icon: const ImageIcon(
-                          AssetImage('assets/images/twitter.png'), //twitter
-                          color: Color.fromARGB(255, 4, 205, 255),
-                        ))
-                  ])
+                          AssetImage('assets/images/twitter.png'),
+                          color: Color(0xFF2563EB),
+                        ),
+                      ),
+                    ],
+                  ),
                 ])),
             body: Stack(children: [
               PageView.builder(
@@ -139,73 +150,47 @@ class Page1 extends StatefulWidget {
 class _Page1State extends State<Page1> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(
-          children: [
-            Image.asset('assets/images/squarecloud.gif',
-                height: 200, fit: BoxFit.cover),
-            const SizedBox(height: 10),
-            const Text('Seja bem vindo',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-            const SizedBox(height: 10),
-            const Center(
-                child: Column(children: [
-              Text.rich(TextSpan(children: <TextSpan>[
-                TextSpan(
-                    text: 'este é o ',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                TextSpan(
-                    text: 'APP ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 129, 64, 251))),
-                TextSpan(
-                    text: 'oficial da ',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                TextSpan(
-                    text: 'Square',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 78, 65, 255))),
-                TextSpan(
-                    text: 'Cloud',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 74, 34, 255)))
-              ]))
-            ])),
-          ],
-        ),
-        Column(children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Image.asset('assets/images/help2.png',
-                height: 50, color: Colors.white),
-            Image.asset(
-              'assets/images/help1.png',
-              height: 50,
-              color: Colors.white,
-            )
-          ]),
-          const SizedBox(height: 20),
-          const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text('Use os botões ou Arraste para continuar',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Color.fromARGB(255, 0, 217, 255)))
-          ])
-        ])
-      ],
-    );
+    return Column(children: [
+      Column(
+        children: [
+          Image.asset('assets/images/squarecloud.gif',
+              height: 200, fit: BoxFit.cover),
+          const SizedBox(height: 10),
+          const Text('Seja bem vindo',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+          const SizedBox(height: 10),
+          const Center(
+              child: Column(children: [
+            Text.rich(TextSpan(children: <TextSpan>[
+              TextSpan(
+                  text: 'este é o ',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              TextSpan(
+                  text: 'APP ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 129, 64, 251))),
+              TextSpan(
+                  text: 'oficial da ',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              TextSpan(
+                  text: 'Square',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 78, 65, 255))),
+              TextSpan(
+                  text: 'Cloud',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 74, 34, 255)))
+            ]))
+          ])),
+        ],
+      ),
+    ]);
   }
 }
 
@@ -216,30 +201,25 @@ class Page2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ClipOval(
-            child: Container(
-          width: 200,
-          color: const Color.fromARGB(255, 77, 76, 76),
-          child: Image.asset('assets/images/key.png'),
-        )),
+        const ClipOval(child: Icon(Icons.key)),
         const SizedBox(height: 50),
         const Center(
             child: Text.rich(TextSpan(children: <TextSpan>[
           TextSpan(
-              text: 'Realize seu primeiro login com sua ',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              text: 'Realize seu primeiro login utilizando sua ',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           TextSpan(
               text: 'APIKey.',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.yellowAccent))
+                  fontSize: 18,
+                  color: Color.fromARGB(255, 204, 129, 17)))
         ]))),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Text('Você pode obte-la na aba ',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 18,
               )),
           GestureDetector(
             onTap: () => _launchUrl('https://squarecloud.app/dashboard/me'),
@@ -248,32 +228,15 @@ class Page2 extends StatelessWidget {
               style: TextStyle(
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 18,
                   decoration: TextDecoration.underline,
-                  color: Colors.blue),
+                  color: Color.fromARGB(255, 103, 138, 255)),
             ),
           )
         ]),
         const SizedBox(
           height: 80,
         ),
-        Center(
-            child: RichText(
-                text: const TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-                text:
-                    'Dica: Continue a rolagem de telas pelos botões ou arrastando!',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            TextSpan(
-              text: '🤩', // emoji characters
-              style: TextStyle(
-                  fontFamily: 'EmojiOne',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15),
-            ),
-          ],
-        ))),
       ],
     );
   }
@@ -285,9 +248,9 @@ class PageLogin extends StatefulWidget {
   @override
   State<PageLogin> createState() => _PageLoginState();
 }
-final control_ = TextEditingController();
+
 class _PageLoginState extends State<PageLogin> {
-  
+  final control_ = TextEditingController();
   @override
   void dispose() {
     control_.dispose();
@@ -317,53 +280,50 @@ class _PageLoginState extends State<PageLogin> {
                     })),
                   ),
                   child: TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      controller: control_,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        label: const Text(
-                          'Insira sua APIKey',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        prefixIcon: const Icon(Icons.key,
-                            color: Color.fromARGB(255, 37, 0, 250)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(60),
-                            borderSide: const BorderSide(
-                                width: 3,
-                                color: Color.fromARGB(255, 0, 153, 255))),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: const BorderSide(
-                                width: 3,
-                                color: Color.fromARGB(255, 2, 69, 255))),
-                      ))))),
+                    style: const TextStyle(color: Colors.white),
+                    controller: control_,
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(17),
+                        borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 60, 9, 241),
+                            width: 2), //<-- SEE HERE
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(17),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 60, 9, 241),
+                              width: 2)),
+                      hintText: 'Insira sua ApiKey',
+                    ),
+                  )))),
       const SizedBox(
-        height: 20,
+        height: 5,
       ),
-      const Showbox(),
+      Showbox(context),
     ]);
   }
-}
 
-class Showbox extends StatelessWidget {
-  
-  const Showbox({super.key, });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget Showbox(BuildContext context) {
     return TextButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
-              const Color.fromARGB(255, 2, 196, 255)),
+          backgroundColor: MaterialStateProperty.all<Color>(bottons),
           padding: MaterialStateProperty.all<EdgeInsets>(
               const EdgeInsets.only(right: 100, left: 100)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(
+              color: Colors.transparent,
+              width: 1,
+            ),
+          )),
         ),
         onPressed: () async {
           var encoder = utf8.encoder;
           var crypt = encoder.convert(control_.text);
           await login(crypt, context);
-          if (onerr == false) {
             account();
             //status();
             Navigator.push(
@@ -371,7 +331,7 @@ class Showbox extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => const HomeApp(),
                 ));
-          }
+          
           //print(data['response']['user']['id']);
         },
         child: const Text(
