@@ -1,7 +1,9 @@
 import 'package:code_text_field/code_text_field.dart';
+import 'package:flutter/foundation.dart';
 // Import the language & theme
 import 'package:highlight/languages/all.dart';
 import 'package:flutter/material.dart';
+import 'package:square/modules/functions/api.dart';
 import 'package:square/modules/views/routes/main_page/homescreen.dart';
 
 var theme = {
@@ -46,7 +48,14 @@ var theme = {
 class Editing extends StatefulWidget {
   final String? source;
   final String? lang;
-  const Editing({Key? key, required this.source, required this.lang})
+  final String? path;
+  final String? appid;
+  const Editing(
+      {Key? key,
+      required this.source,
+      required this.lang,
+      required this.appid,
+      required this.path})
       : super(key: key);
 
   @override
@@ -86,13 +95,13 @@ class _EditingState extends State<Editing> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _codeController?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var vs;
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 90,
@@ -102,14 +111,46 @@ class _EditingState extends State<Editing> {
           backgroundColor: const Color.fromARGB(255, 15, 23, 42),
         ),
         backgroundColor: const Color.fromARGB(255, 11, 14, 19),
-        body:
-            // Quando os itens foram carregados, exibir a lista.
-            SingleChildScrollView(
-                child: CodeTheme(
-          data: CodeThemeData(styles: theme),
-          child: CodeField(
-              controller: _codeController!,
-              textStyle: TextStyle(fontFamily: 'SourceCode')),
-        )));
+        body: SingleChildScrollView(
+            child: Column(children: [
+          Container(
+              margin: const EdgeInsets.all(4),
+              width: 300,
+              height: 50,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      return bottons;
+                      // Cor padrão do botão azul
+                    })),
+                onPressed: () async {
+                  //await file_delete(widget.appid, widget.path);
+                  await file_create(widget.appid, _codeController!.text, context,
+                      widget.path);
+                },
+                child: const Text(
+                  'Salvar',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )),
+          CodeTheme(
+            data: CodeThemeData(styles: theme),
+            child: Container(
+                width: 400,
+                child: CodeField(
+                    controller: _codeController!,
+                    textStyle: TextStyle(fontFamily: 'SourceCode'))),
+          )
+        ])));
   }
 }

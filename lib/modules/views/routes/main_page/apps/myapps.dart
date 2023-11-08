@@ -62,7 +62,7 @@ class _BotListScreenState extends State<BotListScreen> {
     _statusFuture = planinfo(context);
     timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       setState(() {
-        _statusFuture = planinfo(context);
+        _statusFuture;
       });
     });
     filterApps();
@@ -95,6 +95,7 @@ class _BotListScreenState extends State<BotListScreen> {
     super.dispose();
   }
 
+  var s = false;
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -120,10 +121,29 @@ class _BotListScreenState extends State<BotListScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Card(
-                          elevation: 3,
-                          child: Container(
+                      InkWell(
+                          onHover: (value) {
+                            setState(() {
+                              s = value;
+                            });
+                          },
+                          onTap: () {},
+                          child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 20),
                               decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(255, 46, 58, 163),
+                                    offset: Offset(0, -1),
+                                    blurRadius: s ? 20 : 10,
+                                  ),
+                                  BoxShadow(
+                                      color: Color.fromARGB(255, 98, 113, 255),
+                                      offset: Offset(0, 1),
+                                      blurRadius: s ? 20 : 10),
+                                ],
                                 color: inputBackgroundColor,
                                 border: Border.all(
                                   color: const Color.fromARGB(255, 40, 18, 121),
@@ -142,7 +162,7 @@ class _BotListScreenState extends State<BotListScreen> {
                                 const Divider(
                                   color: Colors.grey,
                                   height: 0.1,
-                                  thickness: 1,
+                                  thickness: 0.5,
                                   indent: 20,
                                   endIndent: 20,
                                 ),
@@ -164,8 +184,9 @@ class _BotListScreenState extends State<BotListScreen> {
                                         Text(
                                           data['plan']!.toUpperCase(),
                                           style: const TextStyle(
-                                            fontSize: 17,
-                                          ),
+                                              fontSize: 17,
+                                              color: Color.fromARGB(
+                                                  255, 173, 172, 172)),
                                         ),
                                       ],
                                     ),
@@ -184,8 +205,9 @@ class _BotListScreenState extends State<BotListScreen> {
                                         Text(
                                           formattedDuration,
                                           style: const TextStyle(
-                                            fontSize: 17,
-                                          ),
+                                              fontSize: 17,
+                                              color: Color.fromARGB(
+                                                  255, 173, 172, 172)),
                                         ),
                                       ],
                                     ),
@@ -204,14 +226,15 @@ class _BotListScreenState extends State<BotListScreen> {
                                         Text(
                                           '${data['used']!}MB / ${data['available']!}MB',
                                           style: const TextStyle(
-                                            fontSize: 17,
-                                          ),
+                                              fontSize: 17,
+                                              color: Color.fromARGB(
+                                                  255, 173, 172, 172)),
                                         ),
                                       ],
                                     ),
                                   ],
                                 )
-                              ]))),
+                              ])))
                     ],
                   );
                 }
@@ -307,6 +330,7 @@ class _BotListScreenState extends State<BotListScreen> {
                             text1 = app.tag;
                             imageUrl = app.avatar;
                           });
+                          print(app.id);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -370,10 +394,15 @@ class _BotListScreenState extends State<BotListScreen> {
                                               height: 15,
                                               margin: EdgeInsets.only(
                                                 bottom: 10.0,
-                                                left: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.2,
+                                                left: app.lang == 'static'
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.26
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.2,
                                               ),
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,

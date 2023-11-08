@@ -1,12 +1,12 @@
 // ignore_for_file: camel_case_types, library_private_types_in_public_api
 
 import 'dart:async';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:square/modules/functions/api.dart';
 import 'package:square/modules/functions/apps.dart';
+import 'package:square/modules/views/routes/main_page/home/news.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:square/modules/views/routes/main_page/apps/myapps.dart';
 import 'config.dart';
@@ -144,22 +144,8 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> onTabTapped(int index) async {
-    final prefs = await SharedPreferences.getInstance();
     setState(() {
       _indiceAtual = index;
-      if (index == 2) {
-        var appname = prefs.getStringList('app-name');
-        var appid = prefs.getStringList('app-id');
-        var appavatar = prefs.getStringList('app-avatar');
-        app.addAll(appname as Iterable<String>);
-        id.addAll(appid as Iterable<String>);
-        avatar = Map.fromIterables(appid!, appavatar!);
-        infoapp = Map.fromIterables(appname!, appid);
-      } else {
-        app.clear();
-        infoapp.clear();
-        app.add('Gerenciar um App');
-      }
     });
   }
 }
@@ -179,44 +165,24 @@ class Main extends StatefulWidget {
 
 _MainState state = _MainState();
 
-class _MainState extends State<Main> {
-  String name = "..."; // Defina um valor inicial
-  Timer? timer;
-
-  Future<void> func() async {
-    if (data['name'] != '') {
-      timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-        setState(() {
-          name = data['name']!;
-        });
-      });
-    }
-  }
-
+class _MainState extends State<Main> { 
+  var test = '...';
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    timer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: func(), // Chame a função assíncrona diretamente aqui
+        future: update(context), // Chame a função assíncrona diretamente aqui
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+          if (snapshot.connectionState == ConnectionState.waiting || user == '...') {
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text("Erro: ${snapshot.error}");
           } else {
-            if (data['name'] != '') {
-              timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-                setState(() {
-                  name = data['name']!;
-                });
-              });
-            }
 
             return Column(
               children: [
@@ -233,7 +199,7 @@ class _MainState extends State<Main> {
                                   fontWeight: FontWeight.bold, fontSize: 25),
                             ),
                             TextSpan(
-                              text: name, // Use o valor atualizado de name
+                              text: user, // Use o valor atualizado de name
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 25),
                             ),
@@ -248,20 +214,11 @@ class _MainState extends State<Main> {
                     ),
                   ],
                 ),
-                /*  const SizedBox(
-          height: 5,
-        ),
-        const Center(
-            child: Text('Veja as novidades em tempo real 👇',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-        const SizedBox(
-          height: 5,
-        ),
-        NewsTwitter(),
-        //const DropDown_(),
+                
+        
         const SizedBox(
           height: 10,
-        ), */
+        ), 
                 const SizedBox(
                   height: 200,
                 ),

@@ -6,7 +6,7 @@ class NewsTwitter extends StatelessWidget {
 
   final twitterWebView = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..loadRequest(Uri.parse('https://twitter.com/squarecloudofc'));
+    ..loadRequest(Uri.parse('https://squarecloud.app'));
 
   @override
   Widget build(BuildContext context) {

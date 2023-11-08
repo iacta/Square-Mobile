@@ -1,17 +1,16 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api
+// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api, unused_import, must_be_immutable
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:square/modules/functions/api.dart';
 import 'package:square/modules/functions/apps.dart';
-import 'package:square/modules/views/routes/main_page/apps/edit/files.dart';
 import 'package:square/modules/views/routes/main_page/homescreen.dart';
 
+import 'edit/edit.dart';
 import 'myapps.dart';
-
-var id2;
 
 class SheetConfigApps extends StatefulWidget {
   final String? id; // Adicione o parâmetro 'id'
@@ -23,6 +22,7 @@ class SheetConfigApps extends StatefulWidget {
 }
 
 class _SheetConfigAppsState extends State<SheetConfigApps> {
+  var filter = 'Console';
   bool isExpanded = false;
   late Timer timer;
   String dropdownValue = text1;
@@ -31,18 +31,18 @@ class _SheetConfigAppsState extends State<SheetConfigApps> {
   @override
   void initState() {
     super.initState();
-    statusApp(infoapp[text1], context);
+    statusApp(widget.id, context);
     _future = Future.value(null); // Inicialize com um valor padrão
     _fetchStatusApp();
-    timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 30), (timer) {
       _fetchStatusApp();
     });
   }
 
   Future<void> _fetchStatusApp() async {
     try {
-      final result = await statusApp(infoapp[text1], context);
-
+      final result = await statusApp(widget.id, context);
+      await logs(widget.id);
       setState(() {
         _future = Future.value(result);
       });
@@ -124,10 +124,11 @@ class _SheetConfigAppsState extends State<SheetConfigApps> {
               FutureBuilder(
                   future: _future,
                   builder: (context, snapshot) {
-                    // Verifique se o widget ainda está montado
-                    // Retorna um widget vazio se não estiver montado
-                    if (!mounted) return Container();
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text("Erro: ${snapshot.error}");
+                    } else {
                       if (app.isNotEmpty) {
                         return SizedBox(
                           height: 200,
@@ -159,113 +160,57 @@ class _SheetConfigAppsState extends State<SheetConfigApps> {
                       } else {
                         return const Text("Lista 'app' está vazia.");
                       }
-                    } else if (snapshot.hasError) {
-                      return Text("Erro: ${snapshot.error}");
                     }
-                    return const CircularProgressIndicator();
                   }),
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildButton(
-                        label: on
-                            ? 'Desligar sua Aplicação'
-                            : 'Ligar sua Aplicação',
-                        onPressed: () {
-                          start(widget.id, context);
-                        },
-                        icon: Icons.power,
-                        iconColor: on ? Colors.red : Colors.greenAccent),
-                    buildButton(
-                        label: 'Reiniciar sua Aplicação',
-                        onPressed: () {
-                          restart(widget.id, context);
-                        },
-                        icon: Icons.wifi_protected_setup_rounded,
-                        iconColor: const Color.fromARGB(255, 229, 255, 0)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildButton(
-                        label: 'Deletar sua Aplicação',
-                        onPressed: () async {
-                          delete(widget.id, context);
-                        },
-                        icon: Icons.restore_from_trash,
-                        iconColor: Colors.red),
-                    buildButton(
-                        label: 'Realizar um commit em sua aplicação',
-                        onPressed: () {
-                          setState(() {
-                            id2 = widget.id;
-                          });
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const _FilePickerCommit(),
-                            ),
-                          );
-                        },
-                        icon: Icons.settings_backup_restore_outlined,
-                        iconColor: const Color.fromARGB(255, 1, 226, 58)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    buildButton(
-                        label: 'Realizar um backup da sua Aplicação',
-                        onPressed: () {
-                          backup(widget.id, context);
-                        },
-                        icon: Icons.backup_outlined,
-                        iconColor: Colors.lightBlue),
-                    buildButton(
-                        label: 'Consulte os logs da sua Aplicação',
-                        onPressed: () async {
-                          if (logsmsg.isNotEmpty) {
-                            await Future.delayed(const Duration(seconds: 5),
-                                () async {
-                              logs(widget.id);
-                            });
-                            logsdialog(context);
-                          } else {
-                            await logs(widget.id);
-                            logsdialog(context);
-                          }
-                        },
-                        icon: Icons.receipt_long,
-                        iconColor: const Color.fromARGB(255, 185, 116, 25)),
+                    FilterButton(
+                      text: 'Console',
+                      activeFilter: filter,
+                      onPressed: () {
+                        setState(() {
+                          filter = 'Console';
+                          console(appid: widget.id, context: context);
+                        });
+                      },
+                    ),
+                    FilterButton(
+                      text: 'File Manager',
+                      activeFilter: filter,
+                      onPressed: () {
+                        setState(() {
+                          filter = 'File Manager';
+                        });
+                      },
+                    ),
+                    FilterButton(
+                      text: 'Settings',
+                      activeFilter: filter,
+                      onPressed: () {
+                        setState(() {
+                          filter = 'Settings';
+                        });
+                      },
+                    ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildButton(
-                        label: 'Editar seus arquivos',
-                        onPressed: () {
-                          try {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Files(
-                                        id: widget.id,
-                                      )),
-                            );
-                          } catch (e) {
-                            print(e);
+                Container(
+                    height: 500, // Defina a altura desejada
+                    child: ListView.builder(
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          if (filter == 'Console') {
+                            return console(appid: widget.id, context: context);
+                          } else if (filter == 'File Manager') {
+                            return filer(appid: widget.id);
+                          } else if (filter == 'Settings') {
+                            return settings(appid: widget.id, context: context);
                           }
-                        },
-                        icon: Icons.edit,
-                        iconColor: Colors.orange),
-                  ],
-                ),
+                          return null;
+                        }))
               ],
             ),
           ],
@@ -275,49 +220,120 @@ class _SheetConfigAppsState extends State<SheetConfigApps> {
   }
 }
 
-Future<void> logsdialog(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: inputBackgroundColor.withOpacity(0.9),
-        title: const Text(
-          'Logs',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Wrap(
-          children: [
-            Padding(padding: const EdgeInsets.all(1), child: Text(logsmsg))
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.labelLarge,
-            ),
-            child: Container(
-                color: const Color.fromARGB(255, 130, 163, 255),
-                child: const Text('ok')),
+Widget console({
+  required String? appid,
+  required BuildContext context,
+}) {
+  return Column(children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        buildButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              start(appid, context);
             },
+            icon: Icons.play_arrow_rounded,
+            iconColor: on ? Colors.red : Colors.greenAccent),
+        buildButton(
+            onPressed: () {
+              restart(appid, context);
+            },
+            icon: Icons.replay_outlined,
+            iconColor: const Color.fromARGB(255, 70, 113, 252)),
+      ],
+    ),
+    Container(
+        color: inputBackgroundColor.withOpacity(0.9),
+        width: 400,
+        height: 400,
+        child: Wrap(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(1),
+                child: Column(children: [
+                  Text.rich(
+                    TextSpan(
+                      // default text style
+                      children: <TextSpan>[
+                        const TextSpan(
+                            text: '[Square Cloud Console]: ',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 209, 209, 27),
+                                fontWeight: FontWeight.bold)),
+                        const TextSpan(
+                            text: 'Welcome to console!\n',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text: logsmsg,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ]))
+          ],
+        ))
+  ]);
+}
+
+Widget settings({
+  required String? appid,
+  required BuildContext context,
+}) {
+  return Container(
+    decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+    padding: const EdgeInsets.all(20),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Deletar aplicação',
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+        ),
+        const Text(
+          'Sua aplicação será deletada permanentemente, recomendamos fazer um backup antes. Esta ação é irreversível!',
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+        ),
+        const Divider(
+          endIndent: 9,
+        ),
+        ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: const BorderSide(
+                  color: Colors.transparent,
+                  width: 1,
+                ),
+              ),
+            ),
+            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                return const Color.fromARGB(255, 255, 17, 0);
+              },
+            ),
           ),
-        ],
-      );
-    },
+          onPressed: () => delete(appid, context),
+          child: const Text(
+            'Deletar aplicação',
+            style: TextStyle(color: Colors.white),
+          ),
+        )
+      ],
+    ),
   );
 }
 
 Widget buildButton({
-  required String label,
   required VoidCallback onPressed,
   required IconData icon,
   Color? iconColor, // Adicione a opção de definir a cor do ícone
 }) {
   return Container(
     margin: const EdgeInsets.all(10),
-    width: 175,
-    height: 175,
+    width: 180,
+    height: 100,
     child: ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
@@ -346,25 +362,316 @@ Widget buildButton({
             color: iconColor ??
                 Colors.white, // Cor do ícone definida ou branca por padrão
           ),
-          const SizedBox(height: 10), // Espaço entre o ícone e o texto
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
         ],
       ),
     ),
   );
 }
 
+class filer extends StatefulWidget {
+  String? appid;
+  filer({super.key, this.appid});
+
+  @override
+  State<filer> createState() => _filerState();
+}
+
+class _filerState extends State<filer> {
+  late final Future<void> filesFuture;
+  @override
+  void initState() {
+    super.initState();
+    filesFuture = files(widget.appid, '.%2F');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const SizedBox(
+        height: 5,
+      ),
+      Container(
+          margin: const EdgeInsets.all(4),
+          width: 300,
+          height: 50,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                  return bottons;
+                  // Cor padrão do botão azul
+                })),
+            onPressed: () => backup(widget.appid, context),
+            child: const Text(
+              'Cópia de segurança',
+              style: TextStyle(color: Colors.white),
+            ),
+          )),
+      Container(
+          margin: const EdgeInsets.all(4),
+          width: 300,
+          height: 50,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                  return bottons;
+                  // Cor padrão do botão azul
+                })),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _FilePickerCommit(id: widget.appid),
+              ),
+            ),
+            child: const Text(
+              'Realizar um commit',
+              style: TextStyle(color: Colors.white),
+            ),
+          )),
+      Container(
+          margin: const EdgeInsets.all(4),
+          width: 300,
+          height: 50,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                  return bottons;
+                  // Cor padrão do botão azul
+                })),
+            onPressed: () => backup(widget.appid, context),
+            child: const Text(
+              'Criar arquivo',
+              style: TextStyle(color: Colors.white),
+            ),
+          )),
+      const SizedBox(
+        height: 5,
+      ),
+      Visibility(
+          visible: vs,
+          child: GestureDetector(
+              onTap: () async {
+                await files(widget.appid, '.%2F');
+                setState(() {
+                  filesFuture;
+                  vs = false;
+                });
+              },
+              child: Card(
+                  elevation: 3,
+                  margin: const EdgeInsets.all(8),
+                  child: Container(
+                      color: const Color(0xFF12171F),
+                      child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: ListTile(
+                              title: Row(
+                            children: [
+                              Icon(Icons.drive_folder_upload),
+                              SizedBox(width: 8),
+                              Text('..'),
+                            ],
+                          ))))))),
+      FutureBuilder(
+        future: filesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final List<Map<String, dynamic>> directories = [];
+            final List<Map<String, dynamic>> filesList = [];
+            print(file);
+            if (file != null) {
+              for (final item in file) {
+                if (item['type'] == 'directory') {
+                  directories.add(item);
+                } else {
+                  filesList.add(item);
+                }
+              }
+            }
+
+            // Ordene ambas as listas
+            directories.sort((a, b) => a['name'].compareTo(b['name']));
+            filesList.sort((a, b) => a['name'].compareTo(b['name']));
+
+            // Combine as listas ordenadas
+            final List<Map<String, dynamic>> sortedList = [
+              ...directories,
+              ...filesList
+            ];
+
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: sortedList.length,
+              itemBuilder: (context, index) {
+                return Column(children: [
+                  GestureDetector(
+                    onTap: () async {
+                      if (sortedList[index]['type'] == 'directory') {
+                        await files(
+                            widget.appid, '.%2F/${sortedList[index]['name']}');
+                        setState(() {
+                          vs = true;
+                          filesFuture;
+                        });
+                      } else {
+                        await file_read(
+                            widget.appid, sortedList[index]['name']);
+                        List<int> bytes = fileread.cast<int>();
+                        String decodedString = utf8.decode(bytes);
+
+                        print(decodedString);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Editing(
+                              source: decodedString,
+                              lang: sortedList[index]['name'],
+                              appid: widget.appid,
+                              path: '.%2F/${sortedList[index]['name']}',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Card(
+                      elevation: 3,
+                      margin: const EdgeInsets.all(8),
+                      child: Container(
+                        color: const Color(0xFF12171F),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Icon(
+                                  sortedList[index]['type'] == 'directory'
+                                      ? Icons.folder
+                                      : sortedList[index]['type'] == 'file'
+                                          ? Icons.file_open
+                                          : sortedList[index]['name']
+                                                  .toString()
+                                                  .contains('package')
+                                              ? Icons.token
+                                              : null, // Ícone nulo se nenhuma condição for atendida
+                                ),
+                                const SizedBox(width: 8),
+                                Text(sortedList[index]['name']),
+                              ],
+                            ),
+                            subtitle: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: inputBackgroundColor,
+                                        border: Border.all(
+                                          color: fieldBackgroundColor,
+                                          width: 0.8,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(sortedList[index]['type']),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: inputBackgroundColor,
+                                        border: Border.all(
+                                          color: inputBackgroundColor,
+                                          width: 0.8,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(
+                                          '${sortedList[index]['size'].toString()}KB'),
+                                    ),
+                                    /*Container(
+                                        width: 15,
+                                        height: 15,
+                                        margin: EdgeInsets.only(
+                                          bottom: 10.0,
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                        ),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.more_vert),
+                                          onPressed: () async {
+                                            await file_delete(widget.appid,
+                                                ".%2F/${sortedList[index]['name']}");
+                                            setState(() {
+                                              filesFuture;
+                                            });
+                                          },
+                                        ))*/
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]);
+              },
+            );
+          }
+        },
+      ),
+      const SizedBox(
+        height: 300,
+      )
+    ]);
+  }
+}
+
 class _FilePickerCommit extends StatefulWidget {
-  const _FilePickerCommit();
+  _FilePickerCommit({required id});
+  String? id;
   @override
   State<_FilePickerCommit> createState() => _FilePickerCommitState();
 }
@@ -401,7 +708,7 @@ class _FilePickerCommitState extends State<_FilePickerCommit> {
                 setState(() {
                   dropdownValue = value!;
                   text1 = dropdownValue;
-                  id2 = infoapp[text1];
+                  widget.id = widget.id;
                   if (dropdownValue == app[0]) {
                     vs = false;
                     vsp = false;
@@ -427,7 +734,7 @@ class _FilePickerCommitState extends State<_FilePickerCommit> {
                       if (result == null) {
                       } else {
                         String? path = result?.files.first.path;
-                        commit(id2, path!, context, _isSelected);
+                        commit(widget.id, path!, context, _isSelected);
                         if (pop == true) {
                           Navigator.pop(context);
                           pop = false;

@@ -60,6 +60,7 @@ account() async {
   await prefs.setStringList('app-avatar', list3);
 }
 
+String user = "...";
 Future<void> update(BuildContext key) async {
   final prefs = await SharedPreferences.getInstance();
   final get = await http.get(
@@ -98,6 +99,7 @@ Future<void> update(BuildContext key) async {
     await prefs.setStringList('app-id', list);
     await prefs.setStringList('app-name', list2);
     await prefs.setStringList('app-avatar', list3);
+    user = data['name']!;
     if (kDebugMode) {
       print(apps);
     }
@@ -408,37 +410,89 @@ Future<void> logs(String? appID) async {
 }
 
 var file;
-Future<void> files(String? id) async {
+Future<List<Map<String, dynamic>>?> files(String? id, String? path) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     final get = await http.get(
-        Uri.parse(
-            'https://api.squarecloud.app/v2/apps/$id/files/list?path=.%2F'),
-        headers: <String, String>{
-          'Authorization': prefs.getString('key') ?? ''
-        });
+      Uri.parse(
+          'https://api.squarecloud.app/v2/apps/$id/files/list?path=$path'),
+      headers: <String, String>{
+        'Authorization': prefs.getString('key') ?? '',
+      },
+    );
     Map<String, dynamic> req = json.decode(get.body);
     var map = req['response'];
     file = map;
-    print(file[1]);
+    print("Chamado getFiles");
+    return map;
+  } catch (e) {
+    print(e);
+    return null; // Trate o erro retornando um valor nulo ou outra coisa apropriada
+  }
+}
+
+var fileread;
+Future<void> file_read(String? id, String? name) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final get = await http.get(
+      Uri.parse(
+          'https://api.squarecloud.app/v2/apps/$id/files/read?path=.%2F$name'),
+      headers: <String, String>{
+        'Authorization': prefs.getString('key') ?? '',
+      },
+    );
+    Map<String, dynamic> req = json.decode(get.body);
+    var map = req['response']['data'];
+    fileread = map;
   } catch (e) {
     print(e);
   }
 }
 
-var fileread;
-Future<void> file_read(String? id) async {
+Future<void> file_create(
+    String? id, String? buffer, BuildContext context, String? path) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  final get = Uri.parse('https://api.squarecloud.app/v2/apps/$id/files/create');
+
+  var request = http.MultipartRequest("POST", get);
+  request.headers["Authorization"] = prefs.getString('key') ?? '';
+
+  var buf = await http.MultipartFile.fromBytes(
+      "buffer", Uint8List.fromList(const Utf8Codec().encode(buffer!)));
+  request.files.add(buf);
+  var file = await http.MultipartFile.fromString("path", path!);
+  request.files.add(file);
+  showSnack(context, 'Request enviado! Aguarde alguns segundos.');
+
+  try {
+    final response = await request.send();
+    print(response);
+    if (response.reasonPhrase == 'Unauthorized') {
+      showSnack(context, 'Não autorizado! Verifique sua chave de api!');
+    } else {
+      showSnack(context, 'Request enviado com sucesso!');
+      pop = true;
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<void> file_delete(String? id, String? name) async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    final get = await http.get(
+    final get = await http.delete(
         Uri.parse(
-            'https://api.squarecloud.app/v2/apps/$id/files/read?path=.%2Falpha.js'),
+            'https://api.squarecloud.app/v2/apps/$id/files/delete?path=.%2F$name'),
         headers: <String, String>{
           'Authorization': prefs.getString('key') ?? ''
         });
     Map<String, dynamic> req = json.decode(get.body);
     var map = req['response']['data'];
-    fileread = map;
+    print(map);
+    print(name);
   } catch (e) {
     print(e);
   }

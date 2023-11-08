@@ -146,7 +146,10 @@ class _ConfigState extends State<Config> with TickerProviderStateMixin {
                                   ),
                                   child: Row(children: [
                                     IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          input(context);
+                                        },
                                         icon: const Icon(Icons.edit)),
                                     IconButton(
                                         onPressed: () {},
@@ -177,6 +180,49 @@ class _ConfigState extends State<Config> with TickerProviderStateMixin {
       },
     );
   }
+
+  Future<void> input(BuildContext context) {
+// Initialize with an invalid index
+
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              backgroundColor: inputBackgroundColor.withOpacity(0.8),
+              title: const Text('Insira sua nova Chave'),
+              content: Container(
+                width: double.maxFinite,
+                height: 300, // Defina a altura desejada
+                child: TextFormField(
+                    controller: control,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(17),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 60, 9, 241),
+                              width: 2), //<-- SEE HERE
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(17),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 60, 9, 241),
+                              width: 2), //<-- SEE HERE
+                        ),
+                        label: const Text('Altere sua chave'),
+                        icon: const Icon(Icons.developer_mode))),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    updateKey(control.text);
+                    Navigator.of(context).pop();
+                    _dialog1(context);
+                  },
+                  child: Text('ok'),
+                )
+              ]);
+        });
+  }
 }
 
 var text = '';
@@ -197,6 +243,7 @@ updateKey(String? k) async {
   } else if (statusCode == 200) {
     Map<String, dynamic> responseData = json.decode(response.body);
     var map = responseData["response"];
+    print(map);
     data['id'] = map["user"]["id"];
     data['name'] = map["user"]["tag"];
     data['key'] = k;
