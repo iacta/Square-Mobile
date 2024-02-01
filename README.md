@@ -1,4 +1,4 @@
-![](https://github.com/iacta/Square-Cloud-Android/blob/main/asserts/squarecloud.gif)
+<img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/squarecloud.gif" width=200px heigth=100px/>
 
 [SquareCloud - Website](https://squarecloud.app)
 # Square Cloud Android 
