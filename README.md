@@ -1,20 +1,54 @@
 <img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/squarecloud.gif" width=200px heigth=100px/>
-
-[SquareCloud - Website](https://squarecloud.app)
-# Square Cloud Android 
-  SquareCloud Mobile is the official app from SquareCloud, designed to streamline and enhance your hosting experience. Take full control of your hosting services right at your fingertips. Monitor performance, manage accounts, and provide customer support effortlessly with SquareCloud Mobile. Download now and bring the excellence of SquareCloud wherever you go.
-  
-## Autor
-
-- [@iacta](https://www.github.com/iacta)
+[SquareCloud](https://squarecloud.app/).
 
 
-## License
+> [!NOTE]
+> Qualquer problema encontrado reporte imediatamente via suporte da SquareCloud ou issue neste repositório
 
-[Apache](https://choosealicense.com/licenses/apache-2.0/)
+# SquareCloud Mobile
+Um simples projeto com o proposito de facilitar o uso dos serviços nas plataformas mobile
+
+## 🚀 Começando
+
+Você pode baixar a versão mais recente em: [Release](releases/latest)
+
+Se prefere rodar em seu ambiente confira abaixo os passos para execução
+
+### 📋 Pré-requisitos
+
+* Flutter & Dart mais recentes
+* Emulador mobile (AndroidStudio ou Xcode)
+
+### 🔧 Instalação
+
+Baixe o codigo fonte e extraia na pasta de projetos do seu emulador
+
+Exemplo: ``C:\Users\Administrador\AndroidStudioProjects\test``
 
 
-## 
-[![Dart Version](https://img.shields.io/badge/dart-%202.18.0-blue)](https://dart.dev/)
-[![Flutter Version](https://img.shields.io/badge/flutter-%203.3.0-lightgrey)](https://flutter.dev/)
+## ⚙️ Executando os testes
+
+Apenas rode o projeto utilizando
+```cmd
+flutter run
+```
+
+## 🖇️ Colaborando
+
+O nosso repositório no GitHub está sempre aberto a sugestões e contribuições. Basta você abrir uma issue ou enviar um pull request.
+
+Estamos ansiosos para ouvir suas ideias e trabalhar juntos para tornar o projeto ainda melhor!
+
+## 📄 Licença
+
+Este projeto está sob a licença [Apache](https://choosealicense.com/licenses/apache-2.0/)
+
+## 🎁 Expressões de gratidão
+
+* Conte a outras pessoas sobre este projeto 📢;
+* Um agradecimento publicamente ao JoãoOtavio pela confiança e oportunidade 😊.
+
+
+---
+Feito com ❤️ por [iacta](https://www.github.com/iacta) 😊
 
