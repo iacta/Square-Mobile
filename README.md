@@ -1,14 +1,13 @@
 <img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/squarecloud.gif" width=200px heigth=100px/>
-[SquareCloud](https://squarecloud.app/).
 
-
-> [!NOTE]
+> [!IMPORTANT]
 > Qualquer problema encontrado reporte imediatamente via suporte da SquareCloud ou issue neste repositório
 
 # SquareCloud Mobile
 Um simples projeto com o proposito de facilitar o uso dos serviços nas plataformas mobile
 
 ## 🚀 Começando
+Visite nosso site oficial: [SquareCloud - WebSite](https://squarecloud.app/).
 
 Você pode baixar a versão mais recente em: [Release](releases/latest)
 
