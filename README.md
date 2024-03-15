@@ -3,11 +3,11 @@
 > [!IMPORTANT]
 > Any problems found, report immediately via SquareCloud support or issue in this repository
 
-#SquareCloudMobile
+# SquareCloud-Mobile
 A simple project with the purpose of facilitating the use of services on mobile platforms
 
 ## 🚀 Getting Started
-Visit our official website: [SquareCloud - WebSite](https://squarecloud.app/).
+Visit our official website: [SquareCloud - Website](https://squarecloud.app/).
 
 You can download the latest version from: [Release](releases/latest)
 
