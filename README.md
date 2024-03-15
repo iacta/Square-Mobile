@@ -1,4 +1,4 @@
-<img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/squarecloud.gif" width=200px heigth=100px/>
+<div align="center"><img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/squarecloud.gif" width=200px heigth=100px/></div>
 
 > [!IMPORTANT]
 > Any problems found, report immediately via SquareCloud support or issue in this repository
