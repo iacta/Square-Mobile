@@ -1,53 +1,52 @@
 <img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/squarecloud.gif" width=200px heigth=100px/>
 
 > [!IMPORTANT]
-> Qualquer problema encontrado reporte imediatamente via suporte da SquareCloud ou issue neste repositório
+> Any problems found, report immediately via SquareCloud support or issue in this repository
 
-# SquareCloud Mobile
-Um simples projeto com o proposito de facilitar o uso dos serviços nas plataformas mobile
+#SquareCloudMobile
+A simple project with the purpose of facilitating the use of services on mobile platforms
 
-## 🚀 Começando
-Visite nosso site oficial: [SquareCloud - WebSite](https://squarecloud.app/).
+## 🚀 Getting Started
+Visit our official website: [SquareCloud - WebSite](https://squarecloud.app/).
 
-Você pode baixar a versão mais recente em: [Release](releases/latest)
+You can download the latest version from: [Release](releases/latest)
 
-Se prefere rodar em seu ambiente confira abaixo os passos para execução
+If you prefer to run it in your environment, check out the steps below for execution.
 
-### 📋 Pré-requisitos
+### 📋 Prerequisites
 
-* Flutter & Dart mais recentes
-* Emulador mobile (AndroidStudio ou Xcode)
+* Latest Flutter & Dart
+* Mobile emulator (AndroidStudio or Xcode)
 
-### 🔧 Instalação
+### 🔧 Installation
 
-Baixe o codigo fonte e extraia na pasta de projetos do seu emulador
+Download the source code and extract it to your emulator's project folder
 
-Exemplo: ``C:\Users\Administrador\AndroidStudioProjects\test``
+Example: ``C:\Users\Administrator\AndroidStudioProjects\test``
 
 
-## ⚙️ Executando os testes
+## ⚙️ Running the tests
 
-Apenas rode o projeto utilizando
+Just run the project using
 ```cmd
 flutter run
 ```
 
-## 🖇️ Colaborando
+## 🖇️ Collaborating
 
-O nosso repositório no GitHub está sempre aberto a sugestões e contribuições. Basta você abrir uma issue ou enviar um pull request.
+Our GitHub repository is always open to suggestions and contributions. Just open an issue or send a pull request.
 
-Estamos ansiosos para ouvir suas ideias e trabalhar juntos para tornar o projeto ainda melhor!
+We look forward to hearing your ideas and working together to make the project even better!
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está sob a licença [Apache](https://choosealicense.com/licenses/apache-2.0/)
+This project is under the [Apache] license(https://choosealicense.com/licenses/apache-2.0/)
 
-## 🎁 Expressões de gratidão
+## 🎁 Expressions of gratitude
 
-* Conte a outras pessoas sobre este projeto 📢;
-* Um agradecimento publicamente ao JoãoOtavio pela confiança e oportunidade 😊.
+* Tell other people about this project 📢;
+* A public thank you to JoãoOtavio for his trust and opportunity 😊.
 
 
 ---
-Feito com ❤️ por [iacta](https://www.github.com/iacta) 😊
-
+Made with ❤️ by [iacta](https://www.github.com/iacta) 😊
