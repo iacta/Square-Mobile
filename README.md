@@ -40,7 +40,7 @@ We look forward to hearing your ideas and working together to make the project e
 
 ## 📄 License
 
-This project is under the [Apache] license(https://choosealicense.com/licenses/apache-2.0/)
+This project is under the [Apache license](https://choosealicense.com/licenses/apache-2.0/)
 
 ## 🎁 Expressions of gratitude
 
