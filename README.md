@@ -1,4 +1,4 @@
-<div align="center"><img src="https://github.com/iacta/Square-Cloud-Android/blob/main/assets/images/logo.webp" width=200px heigth=100px/></div>
+<div align="center"><img src="assets/images/logo.webp" width=200px heigth=100px/></div>
 
 > [!IMPORTANT]
 > Any problems found, report immediately via SquareCloud support or issue in this repository
