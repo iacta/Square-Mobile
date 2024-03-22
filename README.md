@@ -6,6 +6,8 @@
 # SquareCloud-Mobile
 A simple project with the purpose of facilitating the use of services on mobile platforms
 
+It has all the features of the Website, including a code editor.
+
 ## 🚀 Getting Started
 Visit our official website: [SquareCloud - Website](https://squarecloud.app/).
 
