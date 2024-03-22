@@ -1,7 +1,7 @@
 <div align="center"><img src="assets/images/logo.webp" width=200px heigth=100px/></div>
 
 > [!IMPORTANT]
-> Any problems found, report immediately via SquareCloud support or issue in this repository
+> Any issues encountered, please report immediately via my DM on discord or issues in this repository
 
 # SquareCloud-Mobile
 A simple project with the purpose of facilitating the use of services on mobile platforms
